@@ -4,6 +4,7 @@ import Results from './components/results/Results'
 import Footer from './components/footer/Footer'
 import About from './components/about/About'
 import Contact from './components/contact/Contact'
+import Returns from './components/returns/Returns'
 import { ThemeProvider } from '@material-ui/styles'
 import Theme from './theme/Theme'
 import {
@@ -21,6 +22,7 @@ function App() {
           <Route path='/results/:query?' render={(routeProps) => (<Results {...routeProps} />)} />
           <Route path='/about' component={About} />
           <Route path='/contact' component={Contact} />
+          <Route path='/returns' component={Returns} />
         </Router>
         <Footer />
       </ThemeProvider>

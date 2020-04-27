@@ -43,19 +43,16 @@ const Footer = () => {
                     justify='center'>
                     <Grid item>
                         <List aria-label="site-links">
-                            <ListItemLink href="#">
+                            <ListItemLink href="/about">
                                 <ListItemText primary="About Us" />
                             </ListItemLink>
-                            <ListItemLink href="#">
-                                <ListItemText primary="Delivery" />
-                            </ListItemLink>
-                            <ListItemLink href="#">
+                            <ListItemLink href="/returns">
                                 <ListItemText primary="Returns Policy" />
                             </ListItemLink>
                             <ListItemLink href="#">
                                 <ListItemText primary="My Account" />
                             </ListItemLink>
-                            <ListItemLink href="#">
+                            <ListItemLink href="/contact">
                                 <ListItemText primary="Contact Us" />
                             </ListItemLink>
                         </List>

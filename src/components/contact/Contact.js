@@ -91,10 +91,6 @@ const Contact = () => {
                             validationSchema={validationSchema}
                         >
                             {props => {
-                                const {
-                                    values,
-                                    setFieldValue
-                                } = props;
                                 return (<Form className={classes.applicationForm}>
                                     <div className={classes.formSection}>
                                         <Typography variant='h4' gutterBottom >
@@ -142,10 +138,11 @@ const Contact = () => {
                         <Typography variant='subtitle2' gutterBottom>
                             Alternatively, you may contact us by phone or post.
                         </Typography>
-                        <Typography variant='subtitle1' >
-                            206 Bourke Street
+                        <Typography variant='subtitle1' gutterbottom >
+                            Appliances Online
                         </Typography>
                         <Typography variant='subtitle1' >
+                            206 Bourke Street<br />
                             Melbourne VIC 3000
                         </Typography>
                         <Typography variant='subtitle1' >
