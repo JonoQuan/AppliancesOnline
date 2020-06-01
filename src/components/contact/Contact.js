@@ -1,5 +1,4 @@
 import React from 'react'
-import Navbar from '../navbar/Navbar'
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography, Grid, Fab } from '@material-ui/core'
 import { Formik, Form, Field } from 'formik'
@@ -77,7 +76,6 @@ const Contact = () => {
 
     return (
         <>
-            <Navbar />
             <div className={classes.contactDiv} >
                 <Grid container
                     alignItems='baseline'

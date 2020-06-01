@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import { CartContext } from '../../contexts/CartContext'
 import {
     Card,
     CardMedia,
@@ -9,12 +10,11 @@ import {
     CardActions
 } from '@material-ui/core'
 import NumberFormat from 'react-number-format'
-import dkettle from '../../images/delonghikettle.jpg'
 
 const useStyles = makeStyles(theme => ({
     card: {
         width: 300,
-        height: 300,
+        height: 350,
         textAlign: 'center',
         margin: theme.spacing(2)
     },
@@ -23,35 +23,31 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ProductCard = () => {
-    const data = {
-        "PName": "DeLonghi Kettle",
-        "Brand": "DeLonghi",
-        "UnitPrice": 129.00,
-        "Description": "DeLonghi Kettle",
-        "ProductImageUrl": dkettle,
-    }
+const ProductCard = (props) => {
+    const { product } = props
+    const { add } = useContext(CartContext)
     const classes = useStyles();
+
     return (
         <div>
             <Card className={classes.card}>
                 <CardMedia
                     className={classes.cardMedia}
                     component="img"
-                    alt={data.PName}
+                    alt={product.PName}
                     height="140"
-                    image={data.ProductImageUrl}
-                    title={data.PName}
+                    image={product.ProductImageUrl}
+                    title={product.PName}
                 />
                 <CardContent>
                     <Typography variant='h5'>
-                        {data.PName}
+                        {product.PName}
                     </Typography>
-                    <Typography variant='body'>
-                        {data.Description}
+                    <Typography variant='body2'>
+                        {product.Description}
                     </Typography><br />
                     <Typography variant='subtitle1' color='error'>
-                        <NumberFormat value={data.UnitPrice}
+                        <NumberFormat value={product.UnitPrice}
                             displayType={'text'}
                             thousandSeparator={true}
                             prefix={'$'}
@@ -60,12 +56,15 @@ const ProductCard = () => {
                     </Typography>
                 </CardContent>
                 <CardActions style={{ display: 'inherit' }}>
-                    <Button variant='contained' size="small" color="secondary">
+                    <Button variant='contained'
+                        size="small"
+                        color="secondary"
+                        onClick={add.bind(this, product)}>
                         Add to Cart
-                                </Button>
+                    </Button>
                 </CardActions>
             </Card>
-        </div>
+        </div >
     )
 }
 

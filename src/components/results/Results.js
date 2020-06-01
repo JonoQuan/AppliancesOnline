@@ -1,31 +1,26 @@
-import React, { useState } from 'react'
-import Navbar from './../navbar/Navbar'
+import React, { useContext } from 'react'
 import ProductCard from './ProductCard'
 import Header from './Header'
-import { useHistory, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
+import { CartContext } from '../../contexts/CartContext'
+import { Grid } from '@material-ui/core'
 
 
 const Results = () => {
     let { query } = useParams()
-    let history = useHistory()
-    const [resultQuery, setResultQuery] = useState(query)
-
-    const handleQueryChange = e => {
-        setResultQuery(e.target.value)
-    }
-
-    const querySubmit = e => {
-        e.preventDefault()
-        history.push(`/results/${resultQuery}`, {
-            query: resultQuery
-        })
-    }
+    const { dummyData } = useContext(CartContext)
 
     return (
         <>
-            <Navbar query={query} handleQueryChange={handleQueryChange} querySubmit={querySubmit} />
             <Header query={query} />
-            <ProductCard />
+            <Grid container
+                justify='space-evenly' >
+                {dummyData.map(product => (
+                    <Grid item key={product.Id} >
+                        <ProductCard product={product} />
+                    </Grid>
+                ))}
+            </Grid>
         </>
     )
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import Navbar from '../navbar/Navbar'
 import { Typography } from '@material-ui/core'
+import Link from '@material-ui/core/Link'
 
 const useStyles = makeStyles(theme => ({
     returnsDiv: {
@@ -13,7 +13,6 @@ const Returns = () => {
     const classes = useStyles()
     return (
         <>
-            <Navbar />
             <div className={classes.returnsDiv}>
                 <Typography variant='h4' gutterBottom >
                     Returns Policy
@@ -51,8 +50,8 @@ const Returns = () => {
                     Contact
             </Typography>
                 <Typography variant='body1' paragraph >
-                    If you have any questions on how to return your item to us, contact us.
-            </Typography>
+                    If you have any questions on how to return your item to us, <Link href="/contact">contact us</Link>.
+                </Typography>
             </div>
         </>
     )

@@ -1,5 +1,4 @@
 import React from 'react'
-import Navbar from '../navbar/Navbar'
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography, Grid } from '@material-ui/core'
 import retailsection from '../../images/retail-section-appliances.png'
@@ -28,7 +27,6 @@ const About = () => {
     const classes = useStyles()
     return (
         <>
-            <Navbar />
             <div className={classes.aboutDiv} >
                 <Grid container
                     alignItems='center'

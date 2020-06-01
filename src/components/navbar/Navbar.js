@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { fade, makeStyles } from '@material-ui/core/styles'
 import {
     AppBar,
@@ -10,16 +10,13 @@ import {
     MenuItem,
     Menu,
     Button,
-    SwipeableDrawer,
-    ListItemText,
-    List,
-    ListItem,
-    Collapse
+    Drawer
 } from '@material-ui/core'
-import { useHistory } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faSearch, faShoppingCart, faEllipsisV, faBars, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faSearch, faShoppingCart, faEllipsisV, faBars } from '@fortawesome/free-solid-svg-icons'
 import logo from '../../images/homeappliances-logo.png'
+import MenuList from './Menu'
+import { CartContext } from '../../contexts/CartContext'
 
 
 const useStyles = makeStyles(theme => ({
@@ -35,15 +32,6 @@ const useStyles = makeStyles(theme => ({
     },
     menuButton: {
         marginRight: theme.spacing(2),
-    },
-    list: {
-        width: 250,
-    },
-    fullList: {
-        width: 'auto',
-    },
-    nested: {
-        paddingLeft: theme.spacing(4),
     },
     title: {
         display: 'none',
@@ -110,29 +98,21 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Navbar = () => {
-    const classes = useStyles();
-    let history = useHistory()
-    const [query, setQuery] = useState('')
+    const classes = useStyles()
+    const { count } = useContext(CartContext)
+    const [query, setQuery] = useState(
+        localStorage.getItem('QueryText') || ''
+    )
     const [menuAnchor, setMenuAnchor] = useState(false)
-    const [shopOpen, setShopOpen] = useState(false)
-    const [accountOpen, setAccountOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null)
 
-    const toggleDrawer = (open) => (event) => {
+    const toggleMenu = (open) => (event) => {
         if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
         }
 
         setMenuAnchor(open);
-    };
-
-    const toggleShopMenu = () => {
-        setShopOpen(!shopOpen);
-    };
-
-    const toggleAccountMenu = () => {
-        setAccountOpen(!accountOpen);
     };
 
     const handleQueryChange = e => {
@@ -141,74 +121,25 @@ const Navbar = () => {
 
     const querySubmit = e => {
         e.preventDefault()
-        history.push(`/results/${query}`, {
-            query: query
-        })
+        window.location.replace(`/results/${query}`)
     }
 
     const subCategory = e => {
         const text = e.target.textContent
         e.preventDefault()
         setQuery(text)
-        history.replace(`/results/${text}`, {
-            query: text
-        })
+        window.location.replace(`/results/${text}`)
     }
 
     const linkClick = e => {
         const text = e.target.textContent
         e.preventDefault()
-        history.replace(`/${text}`)
+        window.location.replace(`/${text}`)
     }
 
-    const list = () => (
-        <div
-            className={classes.list}
-            role="presentation"
-            onClick={toggleDrawer('left', false)}
-            onKeyDown={toggleDrawer('left', false)}
-        >
-            <List>
-                <ListItem button onClick={toggleShopMenu}>
-                    <ListItemText primary={'Shop'} />
-                    <FontAwesomeIcon icon={shopOpen ? faChevronUp : faChevronDown} />
-                </ListItem>
-                <Collapse in={shopOpen} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        <ListItem button value="Kettles" className={classes.nested} onClick={subCategory}>
-                            <ListItemText primary="Kettles" />
-                        </ListItem>
-                        <ListItem button value="Microwaves" className={classes.nested} onClick={subCategory}>
-                            <ListItemText primary="Microwaves" />
-                        </ListItem>
-                        <ListItem button value="Toasters" className={classes.nested} onClick={subCategory}>
-                            <ListItemText primary="Toasters" />
-                        </ListItem>
-                    </List>
-                </Collapse>
-                <ListItem button>
-                    <ListItemText primary={'About'} onClick={linkClick} />
-                </ListItem>
-                <ListItem button>
-                    <ListItemText primary={'Contact'} onClick={linkClick} />
-                </ListItem>
-                <ListItem button onClick={toggleAccountMenu}>
-                    <ListItemText primary={'Account'} />
-                    <FontAwesomeIcon icon={accountOpen ? faChevronUp : faChevronDown} />
-                </ListItem>
-                <Collapse in={accountOpen} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        <ListItem button className={classes.nested}>
-                            <ListItemText primary="Profile" />
-                        </ListItem>
-                        <ListItem button className={classes.nested}>
-                            <ListItemText primary="Logout" />
-                        </ListItem>
-                    </List>
-                </Collapse>
-            </List>
-        </div>
-    );
+    useEffect(() => {
+        localStorage.setItem('QueryText', query)
+    }, [query])
 
     const isMenuOpen = Boolean(anchorEl)
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
@@ -257,9 +188,9 @@ const Navbar = () => {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            <MenuItem>
-                <IconButton aria-label="show 11 new notifications" color="inherit">
-                    <Badge badgeContent={11} color="secondary">
+            <MenuItem onClick={() => { window.location.replace(`/cart`) }}>
+                <IconButton aria-label="Items in cart" color="inherit">
+                    <Badge badgeContent={count} color="secondary">
                         <FontAwesomeIcon icon={faShoppingCart} />
                     </Badge>
                 </IconButton>
@@ -289,18 +220,20 @@ const Navbar = () => {
                         className={classes.menuButton}
                         color="inherit"
                         aria-label="open drawer"
-                        onClick={toggleDrawer('open')}
+                        onClick={toggleMenu('open')}
                     >
                         <FontAwesomeIcon icon={faBars} />
                     </IconButton>
-                    <SwipeableDrawer
+                    <Drawer
                         anchor='left'
                         open={menuAnchor}
-                        onClose={toggleDrawer(false)}
-                        onOpen={toggleDrawer(true)}
+                        onClose={toggleMenu(false)}
+                        onOpen={toggleMenu(true)}
                     >
-                        {list()}
-                    </SwipeableDrawer>
+                        {<MenuList toggleMenu={toggleMenu}
+                            linkClick={linkClick}
+                            subCategory={subCategory} />}
+                    </Drawer>
                     <div className={classes.imgContainer}>
                         <Button href="/">
                             <img
@@ -332,8 +265,10 @@ const Navbar = () => {
                         </Grid>
                         <Grid item>
                             <div className={classes.sectionDesktop}>
-                                <IconButton aria-label="show 17 new notifications" color="inherit">
-                                    <Badge badgeContent={17} color="secondary">
+                                <IconButton aria-label="Items in cart"
+                                    color="inherit"
+                                    onClick={() => { window.location.replace(`/cart`) }}>
+                                    <Badge badgeContent={count} color="secondary">
                                         <FontAwesomeIcon icon={faShoppingCart} />
                                     </Badge>
                                 </IconButton>
