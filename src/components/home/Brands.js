@@ -1,16 +1,46 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Grid, Button, Typography } from '@material-ui/core'
-import breville from '../../images/breville-logo.png'
-import delonghi from '../../images/delonghi-logo.png'
-import kambrook from '../../images/kambrook-logo.png'
-import miele from '../../images/miele-logo.png'
-import panasonic from '../../images/panasonic-logo.png'
-import sharp from '../../images/sharp-logo.png'
-import sunbeam from '../../images/sunbeam-logo.png'
+import { useHistory } from 'react-router-dom'
+import brevilleImg from '../../images/breville-logo.png'
+import delonghiImg from '../../images/delonghi-logo.png'
+import kambrookImg from '../../images/kambrook-logo.png'
+import mieleImg from '../../images/miele-logo.png'
+import panasonicImg from '../../images/panasonic-logo.png'
+import sharpImg from '../../images/sharp-logo.png'
+import sunbeamImg from '../../images/sunbeam-logo.png'
 
 
-const brands = [breville, delonghi, kambrook, miele, panasonic, sharp, sunbeam]
+const brands = [
+    {
+        name: 'breville',
+        img: brevilleImg
+    },
+    {
+        name: 'delonghi',
+        img: delonghiImg
+    },
+    {
+        name: 'kambrook',
+        img: kambrookImg
+    },
+    {
+        name: 'miele',
+        img: mieleImg
+    },
+    {
+        name: 'panasonic',
+        img: panasonicImg
+    },
+    {
+        name: 'sharp',
+        img: sharpImg
+    },
+    {
+        name: 'sunbeam',
+        img: sunbeamImg
+    },
+]
 
 const useStyles = makeStyles(theme => ({
     brands: {
@@ -27,11 +57,14 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
+
 const Brands = () => {
     const classes = useStyles()
+    const history = useHistory()
+
     return (
         <div className={classes.brands}>
-            <Typography variant='h4' align='center'>
+            <Typography variant='h4' align='center' style={{ color: '#F2EBD5' }}>
                 Our Trusted Brands
             </Typography>
             <Grid container
@@ -39,11 +72,12 @@ const Brands = () => {
                 alignItems='center'>
                 {brands.map(brand => {
                     return (
-                        <Grid item xs={1}>
+                        <Grid item key={brand.name} xs={1}>
                             <div className={classes.imgcontainer}>
-                                <Button href="/">
+                                <Button
+                                    onClick={() => { history.push(`results/${brand.name}`) }}>
                                     <img
-                                        src={brand}
+                                        src={brand.img}
                                         className={classes.img}
                                         alt='logo' />
                                 </Button>

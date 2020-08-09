@@ -1,6 +1,5 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { CartContext } from '../../contexts/CartContext'
 import {
     Card,
     CardMedia,
@@ -24,9 +23,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ProductCard = (props) => {
-    const { product } = props
-    const { add } = useContext(CartContext)
-    const classes = useStyles();
+    const { product, handleAdd } = props
+    const classes = useStyles()
 
     return (
         <div>
@@ -59,7 +57,7 @@ const ProductCard = (props) => {
                     <Button variant='contained'
                         size="small"
                         color="secondary"
-                        onClick={add.bind(this, product)}>
+                        onClick={handleAdd.bind(this, product)}>
                         Add to Cart
                     </Button>
                 </CardActions>

@@ -27,14 +27,9 @@ const Menu = (props) => {
     const { toggleMenu, linkClick, subCategory } = props
     const classes = useStyles()
     const [shopOpen, setShopOpen] = useState(false)
-    const [accountOpen, setAccountOpen] = useState(false)
 
     const toggleShopMenu = () => {
         setShopOpen(!shopOpen);
-    };
-
-    const toggleAccountMenu = () => {
-        setAccountOpen(!accountOpen);
     };
 
     return (
@@ -51,6 +46,9 @@ const Menu = (props) => {
                 </ListItem>
                 <Collapse in={shopOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
+                        <ListItem button value="" className={classes.nested} onClick={subCategory}>
+                            <ListItemText primary="All Products" />
+                        </ListItem>
                         <ListItem button value="Kettles" className={classes.nested} onClick={subCategory}>
                             <ListItemText primary="Kettles" />
                         </ListItem>
@@ -68,23 +66,9 @@ const Menu = (props) => {
                 <ListItem button>
                     <ListItemText primary={'Contact'} onClick={linkClick} />
                 </ListItem>
-                <ListItem button onClick={toggleAccountMenu}>
-                    <ListItemText primary={'Account'} />
-                    <FontAwesomeIcon icon={accountOpen ? faChevronUp : faChevronDown} />
-                </ListItem>
-                <Collapse in={accountOpen} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        <ListItem button className={classes.nested}>
-                            <ListItemText primary="Profile" />
-                        </ListItem>
-                        <ListItem button className={classes.nested}>
-                            <ListItemText primary="Logout" />
-                        </ListItem>
-                    </List>
-                </Collapse>
             </List>
         </div>
     )
 }
 
-export default Menu
+export default React.memo(Menu)

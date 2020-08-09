@@ -1,4 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { fade, makeStyles } from '@material-ui/core/styles'
 import {
     AppBar,
@@ -7,16 +9,14 @@ import {
     Grid,
     InputBase,
     Badge,
-    MenuItem,
-    Menu,
     Button,
-    Drawer
+    Drawer,
 } from '@material-ui/core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faSearch, faShoppingCart, faEllipsisV, faBars } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faShoppingCart, faBars } from '@fortawesome/free-solid-svg-icons'
 import logo from '../../images/homeappliances-logo.png'
 import MenuList from './Menu'
-import { CartContext } from '../../contexts/CartContext'
+import SubNav from './SubNav'
 
 
 const useStyles = makeStyles(theme => ({
@@ -25,10 +25,8 @@ const useStyles = makeStyles(theme => ({
     },
     appbar: {
         boxShadow: 'none',
+        color: '#0D0D0D',
         backgroundColor: 'white'
-    },
-    subAppbar: {
-        boxShadow: 'none'
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -76,18 +74,6 @@ const useStyles = makeStyles(theme => ({
             width: 200,
         },
     },
-    sectionDesktop: {
-        display: 'none',
-        [theme.breakpoints.up('md')]: {
-            display: 'flex',
-        },
-    },
-    sectionMobile: {
-        display: 'flex',
-        [theme.breakpoints.up('md')]: {
-            display: 'none',
-        },
-    },
     imgContainer: {
         width: '150px',
         marginLeft: theme.spacing(-2)
@@ -99,13 +85,10 @@ const useStyles = makeStyles(theme => ({
 
 const Navbar = () => {
     const classes = useStyles()
-    const { count } = useContext(CartContext)
-    const [query, setQuery] = useState(
-        localStorage.getItem('QueryText') || ''
-    )
+    const [query, setQuery] = useState('')
+    const count = useSelector(state => state.Cart.count)
+    const history = useHistory()
     const [menuAnchor, setMenuAnchor] = useState(false)
-    const [anchorEl, setAnchorEl] = useState(null)
-    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null)
 
     const toggleMenu = (open) => (event) => {
         if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -121,95 +104,26 @@ const Navbar = () => {
 
     const querySubmit = e => {
         e.preventDefault()
-        window.location.replace(`/results/${query}`)
+        history.push(`/results/${query}`)
     }
 
     const subCategory = e => {
         const text = e.target.textContent
         e.preventDefault()
         setQuery(text)
-        window.location.replace(`/results/${text}`)
+        if (text !== 'All Products') {
+            history.push(`/results/${text}`)
+        }
+        else {
+            history.push(`/results/`)
+        }
     }
 
     const linkClick = e => {
         const text = e.target.textContent
         e.preventDefault()
-        window.location.replace(`/${text}`)
+        history.push(`/${text}`)
     }
-
-    useEffect(() => {
-        localStorage.setItem('QueryText', query)
-    }, [query])
-
-    const isMenuOpen = Boolean(anchorEl)
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
-
-    const handleProfileMenuOpen = event => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleMobileMenuClose = () => {
-        setMobileMoreAnchorEl(null);
-    };
-
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-        handleMobileMenuClose();
-    };
-
-    const handleMobileMenuOpen = event => {
-        setMobileMoreAnchorEl(event.currentTarget);
-    };
-
-    const menuId = 'primary-search-account-menu';
-    const renderMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            id={menuId}
-            keepMounted
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-        </Menu>
-    );
-
-    const mobileMenuId = 'primary-search-account-menu-mobile';
-    const renderMobileMenu = (
-        <Menu
-            anchorEl={mobileMoreAnchorEl}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            id={mobileMenuId}
-            keepMounted
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            open={isMobileMenuOpen}
-            onClose={handleMobileMenuClose}
-        >
-            <MenuItem onClick={() => { window.location.replace(`/cart`) }}>
-                <IconButton aria-label="Items in cart" color="inherit">
-                    <Badge badgeContent={count} color="secondary">
-                        <FontAwesomeIcon icon={faShoppingCart} />
-                    </Badge>
-                </IconButton>
-                <p>Cart</p>
-            </MenuItem>
-            <MenuItem onClick={handleProfileMenuOpen}>
-                <IconButton
-                    aria-label="account of current user"
-                    aria-controls="primary-search-account-menu"
-                    aria-haspopup="true"
-                    color="inherit"
-                >
-                    <FontAwesomeIcon icon={faUser} />
-                </IconButton>
-                <p>Profile</p>
-            </MenuItem>
-        </Menu>
-    );
-
 
     return (
         <div>
@@ -235,7 +149,7 @@ const Navbar = () => {
                             subCategory={subCategory} />}
                     </Drawer>
                     <div className={classes.imgContainer}>
-                        <Button href="/">
+                        <Button onClick={() => { history.push(`/`) }}>
                             <img
                                 src={logo}
                                 className={classes.img}
@@ -264,59 +178,18 @@ const Navbar = () => {
                             </form>
                         </Grid>
                         <Grid item>
-                            <div className={classes.sectionDesktop}>
-                                <IconButton aria-label="Items in cart"
-                                    color="inherit"
-                                    onClick={() => { window.location.replace(`/cart`) }}>
-                                    <Badge badgeContent={count} color="secondary">
-                                        <FontAwesomeIcon icon={faShoppingCart} />
-                                    </Badge>
-                                </IconButton>
-                                <IconButton
-                                    edge="end"
-                                    aria-label="account of current user"
-                                    aria-controls={menuId}
-                                    aria-haspopup="true"
-                                    onClick={handleProfileMenuOpen}
-                                    color="inherit"
-                                >
-                                    <FontAwesomeIcon icon={faUser} />
-                                </IconButton>
-                            </div>
-                            <div className={classes.sectionMobile}>
-                                <IconButton
-                                    aria-label="show more"
-                                    aria-controls={mobileMenuId}
-                                    aria-haspopup="true"
-                                    onClick={handleMobileMenuOpen}
-                                    color="inherit"
-                                >
-                                    <FontAwesomeIcon icon={faEllipsisV} />
-                                </IconButton>
-                            </div>
-                        </Grid>
-                    </Grid>
-                    {/* <div className={classes.grow} /> */}
-                </Toolbar>
-            </AppBar>
-            {renderMobileMenu}
-            {renderMenu}
-            <AppBar className={classes.subAppbar} position="static" color='primary'>
-                <Toolbar>
-                    <Grid container
-                        justify='space-evenly'>
-                        <Grid item>
-                            <Button color='default' size='large' onClick={subCategory} >Kettles</Button>
-                        </Grid>
-                        <Grid item>
-                            <Button color='default' size='large' onClick={subCategory} >Microwaves</Button>
-                        </Grid>
-                        <Grid item>
-                            <Button color="default" size='large' onClick={subCategory} >Toasters</Button>
+                            <IconButton aria-label="Items in cart"
+                                color="inherit"
+                                onClick={() => { history.push(`/cart`) }}>
+                                <Badge badgeContent={count} color="secondary">
+                                    <FontAwesomeIcon icon={faShoppingCart} />
+                                </Badge>
+                            </IconButton>
                         </Grid>
                     </Grid>
                 </Toolbar>
             </AppBar>
+            <SubNav subCategory={subCategory} />
         </div>
     )
 }

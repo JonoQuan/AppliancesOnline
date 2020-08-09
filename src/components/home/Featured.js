@@ -1,4 +1,6 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { addToCart } from '../../reducers/Actions'
 import { makeStyles } from '@material-ui/core/styles'
 import {
     Card,
@@ -10,33 +12,6 @@ import {
     Grid,
 } from '@material-ui/core'
 import NumberFormat from 'react-number-format'
-import brevillekettle from '../../images/brevillekettle.jpg'
-import smegtoaster from '../../images/smegtoaster.jpg'
-import panasonicmicro from '../../images/panasonicmicro.jpg'
-
-const data = [
-    {
-        "PName": "Breville Kettle",
-        "Brand": "Breville",
-        "UnitPrice": 129.00,
-        "Description": "Breville The Smart Kettle",
-        "ProductImageUrl": brevillekettle,
-    },
-    {
-        "PName": "Smeg Toaster",
-        "Brand": "Smeg",
-        "UnitPrice": 119.00,
-        "Description": "Smeg 50s Styles Series 2 Slice Toaster",
-        "ProductImageUrl": smegtoaster,
-    },
-    {
-        "PName": "Panasonic Microwave",
-        "Brand": "Panasonic",
-        "UnitPrice": 248.99,
-        "Description": "Panasonic Flatbed Microwave Oven",
-        "ProductImageUrl": panasonicmicro,
-    }
-]
 
 const useStyles = makeStyles(theme => ({
     featured: {
@@ -45,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     },
     card: {
         width: 300,
-        height: 300,
+        height: 350,
         textAlign: 'center',
         margin: theme.spacing(2)
     },
@@ -54,8 +29,20 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
+
+
 const Featured = () => {
     const classes = useStyles()
+    const dispatch = useDispatch()
+    
+    const products = useSelector(state => state.Data.products)
+    const featuredData = products.filter(product => product.Featured === true)
+
+
+    const handleAdd = (product) => {
+        dispatch(addToCart(product))
+    }
+
     return (
         <div className={classes.featured}>
             <Typography variant='h4' align='center'>
@@ -63,9 +50,9 @@ const Featured = () => {
         </Typography>
             <Grid container
                 justify='space-evenly'>
-                {data.map(product => {
+                {featuredData.map(product => {
                     return (
-                        <Grid item key={product.PName}>
+                        <Grid item key={product.Id}>
                             <Card className={classes.card}>
                                 <CardMedia
                                     className={classes.cardMedia}
@@ -79,7 +66,7 @@ const Featured = () => {
                                     <Typography variant='h5'>
                                         {product.PName}
                                     </Typography>
-                                    <Typography variant='body'>
+                                    <Typography variant='body2'>
                                         {product.Description}
                                     </Typography><br />
                                     <Typography variant='subtitle1' color='error'>
@@ -92,16 +79,20 @@ const Featured = () => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions style={{ display: 'inherit' }}>
-                                    <Button variant='contained' size="small" color="secondary">
+                                    <Button variant='contained'
+                                        size="small"
+                                        color="secondary"
+                                        onClick={handleAdd.bind(this, product)}>
                                         Add to Cart
-                                </Button>
+                                    </Button>
                                 </CardActions>
                             </Card>
                         </Grid>
                     )
-                })}
+                }
+                )}
             </Grid>
-        </div>
+        </div >
     )
 }
 
