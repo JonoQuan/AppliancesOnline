@@ -15,7 +15,9 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(2)
     },
     imgContainer: {
-        width: '400px',
+        width: '100%',
+        marginLeft: '5px',
+        marginRight: '5px'
     },
     img: {
         width: '100%',
@@ -31,7 +33,7 @@ const About = () => {
                 <Grid container
                     alignItems='center'
                     justify='space-evenly' >
-                    <Grid item xs={10} sm={4}>
+                    <Grid item xs={12} sm={4}>
                         <Typography variant='h4' className={classes.header}>
                             About Us
                         </Typography>
@@ -43,7 +45,7 @@ const About = () => {
                             With a wide range of home appliances we are sure to tailor to your needs.
                         </Typography>
                     </Grid>
-                    <Grid item xs={10} sm={4}>
+                    <Grid item xs={12} sm={4}>
                         <div className={classes.imgContainer}>
                             <img
                                 src={retailsection}

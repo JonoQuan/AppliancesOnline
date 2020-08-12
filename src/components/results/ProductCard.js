@@ -12,8 +12,8 @@ import NumberFormat from 'react-number-format'
 
 const useStyles = makeStyles(theme => ({
     card: {
-        width: 300,
-        height: 350,
+        maxWidth: 300,
+        maxHeight: 380,
         textAlign: 'center',
         margin: theme.spacing(2)
     },

@@ -19,8 +19,8 @@ const useStyles = makeStyles(theme => ({
         marginBottom: 50
     },
     card: {
-        width: 300,
-        height: 350,
+        maxWidth: 300,
+        maxHeight: 380,
         textAlign: 'center',
         margin: theme.spacing(2)
     },
@@ -52,7 +52,7 @@ const Featured = () => {
                 justify='space-evenly'>
                 {featuredData.map(product => {
                     return (
-                        <Grid item key={product.Id}>
+                        <Grid item xs={6} md={4} key={product.Id}>
                             <Card className={classes.card}>
                                 <CardMedia
                                     className={classes.cardMedia}

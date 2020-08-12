@@ -78,10 +78,11 @@ const Confirmation = () => {
             </Typography>
             <Paper variant='outlined' className={classes.paperConfirm}>
                 <Grid container
+                    justify='space-evenly'
                     align='center'
                     wrap='nowrap'
                 >
-                    <Grid item xs={6} >
+                    <Grid item xs={5} >
                         <AddressConfirm
                             Header={'Shipping Address'}
                             Name={orderObj.FName + " " + orderObj.Surname}
@@ -90,7 +91,7 @@ const Confirmation = () => {
                             State={orderObj.State}
                             Postcode={orderObj.Postcode} />
                     </Grid>
-                    <Grid item xs={6} >
+                    <Grid item xs={5} >
                         <AddressConfirm
                             Header={'Billing Address'}
                             Name={orderObj.BillingName}

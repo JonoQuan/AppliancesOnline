@@ -76,7 +76,7 @@ const useStyles = makeStyles(theme => ({
     },
     imgContainer: {
         width: '150px',
-        marginLeft: theme.spacing(-2)
+        marginLeft: theme.spacing(-3)
     },
     img: {
         width: '100%',

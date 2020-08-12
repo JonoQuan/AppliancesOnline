@@ -48,9 +48,10 @@ const Results = () => {
                 <div></div>
                 :
                 <Grid container
+                    alignContent='stretch'
                     justify='space-evenly' >
                     {filtered.map(product => (
-                        <Grid item key={product.Id}>
+                        <Grid item xs={6} md={4} key={product.Id}>
                             <ProductCard product={product} handleAdd={handleAdd} />
                         </Grid>
                     ))}
