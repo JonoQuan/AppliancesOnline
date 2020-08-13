@@ -5,7 +5,9 @@ import ProductCard from './ProductCard'
 import Header from './Header'
 import { useParams } from "react-router-dom"
 import { useSelector } from 'react-redux'
-import { Grid } from '@material-ui/core'
+import {
+    Grid, CircularProgress, Typography
+} from '@material-ui/core'
 
 const Results = () => {
     const { query } = useParams()
@@ -21,6 +23,7 @@ const Results = () => {
         setIsLoading(false)
     }, [query])
 
+
     function querySearch(query) {
         if (query != null) {
             let lowerCasedQuery = query.toLowerCase()
@@ -35,7 +38,6 @@ const Results = () => {
         }
     }
 
-
     const handleAdd = (product) => {
         dispatch(addToCart(product))
     }
@@ -44,9 +46,7 @@ const Results = () => {
     return (
         <>
             <Header query={query} />
-            {isLoading ?
-                <div></div>
-                :
+            {filtered.length >= 1 ?
                 <Grid container
                     alignContent='stretch'
                     justify='space-evenly' >
@@ -56,6 +56,15 @@ const Results = () => {
                         </Grid>
                     ))}
                 </Grid>
+                :
+                <>
+                <Typography variant='h5' align='center' style={{ padding: '16px' }}>
+                        Sorry there were was no result
+                </Typography>
+                <Typography variant='subtitle1' align='center' style={{ padding: '16px' }}>
+                        Please try again
+                </Typography>
+                </>
             }
         </>
     )
